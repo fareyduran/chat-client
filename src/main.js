@@ -1,4 +1,16 @@
 import { createApp } from 'vue'
+import { createPinia } from 'pinia'
 import App from './App.vue'
+import router from './router'
+import { useUserStore } from './stores/user.store';
 
-createApp(App).mount('#app')
+const app = createApp(App)
+
+app.use(createPinia());
+
+const userStore = useUserStore();
+userStore.loadUserFromStorage();
+
+app.use(router);
+
+app.mount('#app');
