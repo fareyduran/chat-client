@@ -7,7 +7,7 @@
     </div>
 
     <ul v-else class="list">
-      <li v-for="room in rooms" :key="room.id" class="room-item">
+      <li v-for="room in rooms" :key="room.id" class="room-item" :class="{ selectable: isSelectable }">
         <div class="room-info">
           <div class="room-header">
             <h3>{{ room.name }}</h3>
@@ -42,6 +42,10 @@ const props = defineProps({
     default: 'Rooms'
   },
   showJoinButton: {
+    type: Boolean,
+    default: false
+  },
+  isSelectable: {
     type: Boolean,
     default: false
   }
@@ -111,12 +115,12 @@ h2 {
   margin-bottom: 10px;
   background-color: #f5f5f5;
   border-radius: 8px;
-  cursor: pointer;
   transition: background-color 0.2s;
 }
 
-.room-item:hover {
+.selectable:hover {
   background-color: #e8e8e8;
+  cursor: pointer;
 }
 
 .room-info {

@@ -30,6 +30,7 @@
         v-if="activeTab === 'myRooms'" 
         :rooms="myRooms"
         title="Tus Salas"
+        :isSelectable="true"
       />
       <RoomList 
         v-if="activeTab === 'otherRooms'" 
