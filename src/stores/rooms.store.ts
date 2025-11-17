@@ -29,13 +29,11 @@ export const useRoomStore = defineStore('rooms', {
   actions: {
     async setRooms() {
       const response = await getRooms();
-      console.log('Rooms API response:', response);
       this.rooms = Array.isArray(response.data) ? response.data : [response.data];
       this.roomsMetadata = response.metadata;
     },
     async setMyRooms(userId: string) {
       const response = await getUserRooms(userId);
-      console.log('Rooms API response:', response);
       this.myRooms = Array.isArray(response.data) ? response.data : [response.data];
       this.myRoomsMetadata = response.metadata;
     },

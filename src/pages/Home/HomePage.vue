@@ -31,6 +31,7 @@
         :rooms="myRooms"
         title="Tus Salas"
         :isSelectable="true"
+        @selectRoom="handleSelectRoom"
       />
       <RoomList 
         v-if="activeTab === 'otherRooms'" 
@@ -51,11 +52,13 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
+import { useRouter } from 'vue-router';
 import RoomList from "@/pages/Home/components/RoomList.vue";
 import CreateRoom from "@/pages/Home/components/CreateRoom.vue";
 import { useRoomStore } from '@/stores/rooms.store';
 import { useUserStore } from '@/stores/user.store';
 
+const router = useRouter();
 const activeTab = ref('myRooms');
 const showModal = ref(false);
 
@@ -106,6 +109,10 @@ const handleJoinRoom = async (room) => {
   } catch (error) {
     console.error('Error al unirse a la sala:', error);
   }
+};
+
+const handleSelectRoom = (room) => {
+  router.push({ name: 'chat', params: { roomId: room.id } });
 };
 </script>
 

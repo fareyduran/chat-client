@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
 import AuthPage from '@/pages/Auth/AuthPage.vue';
 import HomePage from '@/pages/Home/HomePage.vue';
+import ChatPage from '@/pages/Chat/ChatPage.vue';
 import MainLayout from '@/layouts/MainLayout.vue';
 import { useUserStore } from '@/stores/user.store';
 
@@ -14,6 +15,12 @@ const routes: RouteRecordRaw[] = [
         path: '',
         name: 'home',
         component: HomePage,
+        meta: { requiresAuth: true }
+      },
+      {
+        path: 'chat/:roomId',
+        name: 'chat',
+        component: ChatPage,
         meta: { requiresAuth: true }
       }
     ]

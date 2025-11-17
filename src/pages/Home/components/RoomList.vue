@@ -7,7 +7,13 @@
     </div>
 
     <ul v-else class="list">
-      <li v-for="room in rooms" :key="room.id" class="room-item" :class="{ selectable: isSelectable }">
+      <li 
+        v-for="room in rooms" 
+        :key="room.id" 
+        class="room-item" 
+        :class="{ selectable: isSelectable }"
+        @click="isSelectable ? handleRoomClick(room) : null"
+      >
         <div class="room-info">
           <div class="room-header">
             <h3>{{ room.name }}</h3>
@@ -51,7 +57,7 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['joinRoom']);
+const emit = defineEmits(['joinRoom', 'selectRoom']);
 
 const userStore = useUserStore();
 
@@ -63,6 +69,10 @@ const isMember = (room) => {
 
 const handleJoinRoom = (room) => {
   emit('joinRoom', room);
+};
+
+const handleRoomClick = (room) => {
+  emit('selectRoom', room);
 };
 
 const formatDate = (dateString) => {
