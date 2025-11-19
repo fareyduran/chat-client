@@ -30,6 +30,13 @@ export const useMessageStore = defineStore('messages', {
     async sendMessage(roomId: string, senderId: string, message: string) {
       await sendMessage(roomId, senderId, message);
       this.getMessagesFromRoom(roomId);
+    },
+    addRealtimeMessage(message: Message) {
+      const exists = this.messages.some(msg => msg.id === message.id);
+      if (!exists) {
+        this.messages.push(message);
+        this.pageInfo.count += 1;
+      }
     }
   }
 });

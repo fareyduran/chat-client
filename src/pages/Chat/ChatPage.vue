@@ -20,12 +20,14 @@
 </template>
 
 <script setup>
-import { onMounted, computed } from 'vue';
+import { onMounted, onUnmounted, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import MessageList from './components/MessageList.vue';
 import MessageInput from './components/MessageInput.vue';
 import { useMessageStore } from '@/stores/messages.store';
 import { useUserStore } from '@/stores/user.store';
+import { useMessageSocket } from '@/composables/useMessageSocket';
+import { watch } from 'vue';
 
 const router = useRouter();
 const route = useRoute();
@@ -35,6 +37,7 @@ const userStore = useUserStore();
 const roomId = computed(() => route.params.roomId);
 const messages = computed(() => messageStore.messages || []);
 const hasMoreMessages = computed(() => messageStore.pageInfo.hasMoreMessages);
+const { isConnected, messages: wsMessages, joinRoom, leaveRoom } = useMessageSocket();
 
 const goBack = () => {
   router.push({ name: 'home' });
@@ -51,7 +54,20 @@ const handleSendMessage = (messageText) => {
 
 onMounted(async () => {
   await messageStore.getMessagesFromRoom(roomId.value);
+  joinRoom(roomId.value);
+  console.log('[ChatPage] WebSocket conectado:', isConnected.value);
 });
+
+onUnmounted(() => {
+  leaveRoom(roomId.value);
+});
+
+watch(wsMessages, (newMessages) => {
+  if (newMessages.length > 0) {
+    const latestMessage = newMessages[newMessages.length - 1];
+    messageStore.addRealtimeMessage(latestMessage);
+  }
+}, { deep: true });
 </script>
 
 <style scoped>
