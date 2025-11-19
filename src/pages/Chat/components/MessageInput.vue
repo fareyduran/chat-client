@@ -17,17 +17,22 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useToast } from 'vue-toastification';
 
+const MAX_MESSAGE_LENGTH = 50;
 const emit = defineEmits(['sendMessage']);
-
+const toast = useToast();
 const messageText = ref('');
 const inputRef = ref(null);
 
 const sendMessage = () => {
-  if (messageText.value.trim()) {
+  if (messageText.value.trim() && messageText.value.length < MAX_MESSAGE_LENGTH) {
     emit('sendMessage', messageText.value.trim());
     messageText.value = '';
     inputRef.value?.focus();
+    toast.success("Mensaje enviado.");
+  } else {
+    toast.error("El mensaje no puede superar los 50 caracteres o ser vacío.");
   }
 };
 

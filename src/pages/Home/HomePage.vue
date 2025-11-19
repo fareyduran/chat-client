@@ -57,12 +57,13 @@ import RoomList from "@/pages/Home/components/RoomList.vue";
 import CreateRoom from "@/pages/Home/components/CreateRoom.vue";
 import { useRoomStore } from '@/stores/rooms.store';
 import { useUserStore } from '@/stores/user.store';
+import { useToast } from 'vue-toastification';
 
 const router = useRouter();
+const toast = useToast();
+const roomStore = useRoomStore();
 const activeTab = ref('myRooms');
 const showModal = ref(false);
-
-const roomStore = useRoomStore();
 
 const myRooms = computed(() => roomStore.myRooms || []);
 const otherRooms = computed(() => roomStore.rooms || []);
@@ -88,9 +89,11 @@ const handleCreateRoom = async (roomName) => {
     }
     
     await roomStore.createRoom(roomName, userId);
-    
+
+    toast.success('Sala creada exitosamente.');
     activeTab.value = 'myRooms';
   } catch (error) {
+    toast.error('Error al crear la sala.');
     console.error('Error al crear la sala:', error);
   }
 };
@@ -105,8 +108,10 @@ const handleJoinRoom = async (room) => {
     }
     
     await roomStore.assignParticipant(room.id, userId);
+    toast.success(`Te has unido a la sala: ${room.name}`);
     activeTab.value = 'myRooms';
   } catch (error) {
+    toast.error('Error al unirse a la sala.');
     console.error('Error al unirse a la sala:', error);
   }
 };
